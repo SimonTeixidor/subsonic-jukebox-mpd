@@ -1,0 +1,5 @@
+music.example.com {
+    @jukebox path_regexp ^/rest/(jukeboxControl|getUser|getUsers)(\.view)?$
+    reverse_proxy @jukebox 127.0.0.1:4534
+    reverse_proxy 127.0.0.1:4533
+}

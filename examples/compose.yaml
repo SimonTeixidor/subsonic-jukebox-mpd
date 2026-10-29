@@ -1,0 +1,13 @@
+services:
+  jukebox-sidecar:
+    build: ..
+    image: subsonic-jukebox-mpd
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:4534:4534"
+    environment:
+      SUBSONIC_URL: http://navidrome:4533      # as seen from this container
+      STREAM_BASE_URL: http://192.168.1.10:4533 # as seen from the MPD host
+      MPD_HOST: 192.168.1.20
+      MPD_PORT: "6600"
+      # GAIN: ignore

@@ -1,0 +1,26 @@
+# Podman quadlet: copy to ~/.config/containers/systemd/ (rootless) or
+# /etc/containers/systemd/ (rootful), then `systemctl [--user] daemon-reload`
+# and `systemctl [--user] start jukebox-sidecar`.
+[Unit]
+Description=Subsonic jukeboxControl -> MPD sidecar
+After=network-online.target
+
+[Container]
+ContainerName=jukebox-sidecar
+Image=localhost/subsonic-jukebox-mpd:latest
+# Host networking so it can listen on 127.0.0.1 for the reverse proxy.
+Network=host
+Environment=LISTEN=127.0.0.1:4534
+Environment=SUBSONIC_URL=http://127.0.0.1:4533
+# Must be reachable *from the MPD host*:
+Environment=STREAM_BASE_URL=http://192.168.1.10:4533
+Environment=MPD_HOST=192.168.1.20
+Environment=MPD_PORT=6600
+#Environment=MPD_PASSWORD=
+#Environment=GAIN=ignore
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
